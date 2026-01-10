@@ -1,0 +1,16 @@
+{
+  "sinif_ad": "12. Sınıf",
+  "dersler": [
+    { "ad": "Türk Dili ve Edebiyatı", "id": "tde12", "aciklama": "Türk Dili ve Edebiyatı" },
+    { "ad": "T.C. İnkılap Tarihi ve Atatürkçülük", "id": "ink12", "aciklama": "T.C. İnkılap Tarihi ve Atatürkçülük" },
+    { "ad": "Din Kültürü ve Ahlak Bilgisi", "id": "din12", "aciklama": "Din Kültürü ve Ahlak Bilgisi" },
+    { "ad": "İngilizce", "id": "ing12", "aciklama": "Birinci Yabancı Dil" },
+    { "ad": "İleri Matematik", "id": "imat12", "aciklama": "Matematik (Sayısal/EA)" },
+    { "ad": "Fen Bilimleri Tarihi", "id": "fen12", "aciklama": "Fen Bilimleri Tarihi ve Uygulamaları" },
+    { "ad": "Çağdaş Türk ve Dünya Tarihi", "id": "ctdt12", "aciklama": "Çağdaş Türk ve Dünya Tarihi" },
+    { "ad": "Mantık", "id": "man12", "aciklama": "Mantık" },
+    { "ad": "İleri Fizik", "id": "ifiz12", "aciklama": "Fizik (Sayısal)" },
+    { "ad": "İleri Kimya", "id": "ikim12", "aciklama": "Kimya (Sayısal)" },
+    { "ad": "İleri Biyoloji", "id": "ibiyo12", "aciklama": "Biyoloji (Sayısal)" }
+  ]
+}

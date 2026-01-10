@@ -1,0 +1,16 @@
+{
+  "sinif_ad": "11. Sınıf",
+  "dersler": [
+    { "ad": "Türk Dili ve Edebiyatı", "id": "tde11", "aciklama": "Türk Dili ve Edebiyatı" },
+    { "ad": "Tarih", "id": "tar11", "aciklama": "Tarih" },
+    { "ad": "Felsefe", "id": "fel11", "aciklama": "Felsefe" },
+    { "ad": "Din Kültürü ve Ahlak Bilgisi", "id": "din11", "aciklama": "Din Kültürü ve Ahlak Bilgisi" },
+    { "ad": "İngilizce", "id": "ing11", "aciklama": "Birinci Yabancı Dil" },
+    { "ad": "İleri Matematik", "id": "imat11", "aciklama": "Matematik (Sayısal/EA)" },
+    { "ad": "İleri Fizik", "id": "ifiz11", "aciklama": "Fizik (Sayısal)" },
+    { "ad": "İleri Kimya", "id": "ikim11", "aciklama": "Kimya (Sayısal)" },
+    { "ad": "İleri Biyoloji", "id": "ibiyo11", "aciklama": "Biyoloji (Sayısal)" },
+    { "ad": "Psikoloji", "id": "psi11", "aciklama": "Psikoloji (Sözel/EA)" },
+    { "ad": "Sosyoloji", "id": "sos11", "aciklama": "Sosyoloji (Sözel/EA)" }
+  ]
+}

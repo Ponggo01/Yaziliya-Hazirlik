@@ -1,15 +1,18 @@
 {
   "sinif_ad": "10. Sınıf",
   "dersler": [
-    {
-      "ad": "Adabımuaşeret",
-      "id": "adap",
-      "aciklama": "Adabımuaşeret"
-    },
-    {
-      "ad": "İnglizce",
-      "id": "ing",
-      "aciklama": "ingilizce"
-    }
+    { "ad": "Türk Dili ve Edebiyatı", "id": "tde10", "aciklama": "Türk Dili ve Edebiyatı" },
+    { "ad": "Matematik", "id": "mat10", "aciklama": "Matematik" },
+    { "ad": "Fizik", "id": "fiz10", "aciklama": "Fizik" },
+    { "ad": "Kimya", "id": "kim10", "aciklama": "Kimya" },
+    { "ad": "Biyoloji", "id": "biyo10", "aciklama": "Biyoloji" },
+    { "ad": "Tarih", "id": "tar10", "aciklama": "Tarih" },
+    { "ad": "Coğrafya", "id": "cog10", "aciklama": "Coğrafya" },
+    { "ad": "Felsefe", "id": "fel10", "aciklama": "Felsefe" },
+    { "ad": "Din Kültürü ve Ahlak Bilgisi", "id": "din10", "aciklama": "Din Kültürü ve Ahlak Bilgisi" },
+    { "ad": "İngilizce", "id": "ing10", "aciklama": "Birinci Yabancı Dil" },
+    { "ad": "Almanca", "id": "alm10", "aciklama": "İkinci Yabancı Dil" },
+    { "ad": "Beden Eğitimi ve Spor", "id": "bed10", "aciklama": "Beden Eğitimi ve Spor" },
+    { "ad": "Adabımuaşeret", "id": "adap10", "aciklama": "Adabımuaşeret (Seçmeli/Zorunlu)" }
   ]
 }

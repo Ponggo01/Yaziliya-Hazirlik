@@ -1,0 +1,18 @@
+{
+  "sinif_ad": "9. Sınıf",
+  "dersler": [
+    { "ad": "Türk Dili ve Edebiyatı", "id": "tde9", "aciklama": "Türk Dili ve Edebiyatı" },
+    { "ad": "Matematik", "id": "mat9", "aciklama": "Matematik" },
+    { "ad": "Fizik", "id": "fiz9", "aciklama": "Fizik" },
+    { "ad": "Kimya", "id": "kim9", "aciklama": "Kimya" },
+    { "ad": "Biyoloji", "id": "biyo9", "aciklama": "Biyoloji" },
+    { "ad": "Tarih", "id": "tar9", "aciklama": "Tarih" },
+    { "ad": "Coğrafya", "id": "cog9", "aciklama": "Coğrafya" },
+    { "ad": "Din Kültürü ve Ahlak Bilgisi", "id": "din9", "aciklama": "Din Kültürü ve Ahlak Bilgisi" },
+    { "ad": "Sağlık Bilgisi ve Trafik Kültürü", "id": "sag9", "aciklama": "Sağlık Bilgisi ve Trafik Kültürü" },
+    { "ad": "İngilizce", "id": "ing9", "aciklama": "Birinci Yabancı Dil" },
+    { "ad": "Almanca", "id": "alm9", "aciklama": "İkinci Yabancı Dil" },
+    { "ad": "Beden Eğitimi ve Spor", "id": "bed9", "aciklama": "Beden Eğitimi ve Spor" },
+    { "ad": "Görsel Sanatlar/Müzik", "id": "san9", "aciklama": "Görsel Sanatlar veya Müzik" }
+  ]
+}
