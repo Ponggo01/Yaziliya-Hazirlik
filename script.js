@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Sidebar Menüsü ---
 async function fetchSidebarData() {
     try {
-        const response = await fetch('data/siniflar.json');
+        // Cache Busting: ?v=${new Date().getTime()} eklendi
+        const response = await fetch(`data/siniflar.json?v=${new Date().getTime()}`);
         const data = await response.json();
         const sidebar = document.getElementById('sidebar-content');
         if (sidebar) {
@@ -78,24 +79,24 @@ async function showRecentUpdates() {
     let allFiles = [];
 
     try {
-        // 1. Sınıfları Çek (9, 10, 11, 12)
-        const siniflarResp = await fetch('data/siniflar.json');
+        // 1. Sınıfları Çek (Cache Busting Eklendi)
+        const siniflarResp = await fetch(`data/siniflar.json?v=${new Date().getTime()}`);
         const siniflarData = await siniflarResp.json();
 
         // 2. Her sınıfı tek tek gez
         // Promise.all kullanarak işlemleri paralel yapıyoruz (daha hızlı çalışır)
         await Promise.all(siniflarData.siniflar.map(async (sinif) => {
             try {
-                // Sınıfın ders listesini çek (Örn: data/9/dersler.json)
-                const derslerResp = await fetch(`data/${sinif.id}/dersler.json`);
+                // Sınıfın ders listesini çek (Cache Busting Eklendi)
+                const derslerResp = await fetch(`data/${sinif.id}/dersler.json?v=${new Date().getTime()}`);
                 if (!derslerResp.ok) return; 
                 const derslerData = await derslerResp.json();
 
                 // 3. O sınıftaki her dersi tek tek gez
                 await Promise.all(derslerData.dersler.map(async (ders) => {
                     try {
-                        // Dersin dosya içeriğini çek (Örn: data/9/matematik.json)
-                        const dosyaResp = await fetch(`data/${sinif.id}/${ders.id}.json`);
+                        // Dersin dosya içeriğini çek (Cache Busting Eklendi)
+                        const dosyaResp = await fetch(`data/${sinif.id}/${ders.id}.json?v=${new Date().getTime()}`);
                         if (!dosyaResp.ok) return;
                         const dosyaData = await dosyaResp.json();
 
@@ -160,7 +161,8 @@ async function renderSinifPage() {
     if (!sinifId) return;
 
     try {
-        const response = await fetch(`data/${sinifId}/dersler.json`);
+        // Cache Busting Eklendi
+        const response = await fetch(`data/${sinifId}/dersler.json?v=${new Date().getTime()}`);
         if (!response.ok) throw new Error("Veri yok");
         const data = await response.json();
 
@@ -192,7 +194,8 @@ async function renderDersPage() {
     if (!sinifId || !dersId) return;
 
     try {
-        const response = await fetch(`data/${sinifId}/${dersId}.json`);
+        // Cache Busting Eklendi
+        const response = await fetch(`data/${sinifId}/${dersId}.json?v=${new Date().getTime()}`);
         if (!response.ok) throw new Error("Dosya yok");
         const data = await response.json();
         
