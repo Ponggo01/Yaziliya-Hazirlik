@@ -1,0 +1,15 @@
+{
+  "sinif_ad": "10. Sınıf",
+  "dersler": [
+    {
+      "ad": "Adabımuaşeret",
+      "id": "adap",
+      "aciklama": "Adabımuaşeret"
+    },
+    {
+      "ad": "İnglizce",
+      "id": "ing",
+      "aciklama": "ingilizce"
+    }
+  ]
+}
