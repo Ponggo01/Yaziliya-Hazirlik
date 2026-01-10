@@ -1,0 +1,51 @@
+name: Deploy Piri Reis AL Site to Pages
+
+on:
+  # 'main' dalına push yapıldığında çalışır.
+  # Eğer dal isminiz 'master' ise burayı 'master' olarak değiştirin.
+  push:
+    branches: ["main"]
+
+  # GitHub arayüzünden manuel olarak tetiklemeye izin verir.
+  workflow_dispatch:
+
+# GitHub Pages dağıtımı için gerekli yetkiler
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# İSTEDİĞİNİZ ÖZELLİK: Concurrency
+# Aynı grupta (pages) yeni bir işlem başladığında, devam eden eski işlemi iptal eder.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # 1. Aşama: Dosyaları Hazırla
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (Kodları Çek)
+        uses: actions/checkout@v4
+
+      - name: Setup Pages (Pages Ayarları)
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact (Dosyaları Yükle)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Projeniz ana dizinde olduğu için '.' kullanıyoruz
+          path: '.'
+
+  # 2. Aşama: Yayına Al
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
