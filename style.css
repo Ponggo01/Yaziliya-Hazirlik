@@ -41,15 +41,18 @@ header {
     padding: 15px;
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Mobilde hamburger ve logo arası mesafe */
     position: sticky;
     top: 0;
     z-index: 50;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .hamburger {
     font-size: 24px;
     cursor: pointer;
     margin-right: 15px;
+    padding: 5px; /* Tıklama alanını genişlet */
 }
 
 /* Sidebar */
@@ -66,15 +69,17 @@ header {
     padding-top: 60px;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5); /* Sidebar açıldığında gölge */
 }
 
 .sidebar a {
-    padding: 12px 25px;
+    padding: 15px 25px; /* Mobilde daha rahat tıklama için dikey padding arttı */
     text-decoration: none;
     font-size: 18px;
     color: #bdc3c7;
     display: block;
     transition: 0.2s;
+    white-space: nowrap; /* Metin kaymasını engelle */
 }
 
 .sidebar a:hover {
@@ -86,7 +91,8 @@ header {
     position: absolute;
     top: 10px;
     right: 20px;
-    font-size: 30px !important;
+    font-size: 36px !important;
+    margin-left: 50px;
 }
 
 .about-link {
@@ -150,10 +156,11 @@ header {
 /* Main Content */
 #main {
     padding: 20px;
-    max-width: 900px;
+    max-width: 1200px; /* Geniş ekranlar için max-width arttırıldı */
     margin: auto;
     width: 100%;
     flex: 1;
+    box-sizing: border-box; /* Padding taşmalarını engeller */
 }
 
 /* Ders ve Dosya Kartları */
@@ -168,34 +175,42 @@ header {
 .ders-kart h2, .ders-kart h3 {
     color: var(--text-color);
     border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 5px;
+    padding-bottom: 10px;
+    margin-top: 0;
 }
 
 .dosya-listesi {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .dosya-listesi li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px;
+    padding: 15px 10px;
     border-bottom: 1px solid var(--border-color);
+}
+
+.dosya-listesi li:last-child {
+    border-bottom: none;
 }
 
 .dosya-bilgi {
     display: flex;
     flex-direction: column;
+    gap: 4px;
 }
 
 .dosya-adi {
     font-weight: 600;
     color: var(--text-color);
+    word-break: break-word; /* Uzun dosya isimlerini alt satıra atar */
 }
 
 .ogretmen-adi {
-    font-size: 12px;
+    font-size: 13px;
     color: #7f8c8d;
     font-style: italic;
 }
@@ -203,11 +218,16 @@ header {
 .indir-buton {
     background: var(--success-color);
     color: white !important;
-    padding: 6px 12px;
-    border-radius: 4px;
+    padding: 8px 16px;
+    border-radius: 6px;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 14px;
     white-space: nowrap;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
 }
 
 .indir-buton:hover {
@@ -219,89 +239,66 @@ header {
     background: linear-gradient(135deg, #2c3e50, #34495e);
     color: white;
     padding: 40px 20px;
-    border-radius: 8px;
+    border-radius: 12px;
     text-align: center;
     margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .hero-section h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2rem;
 }
 
 .hero-section p {
-    opacity: 0.8;
+    opacity: 0.9;
     margin-top: 10px;
+    font-size: 1.1rem;
 }
 
 .container {
     background: var(--card-bg);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px var(--shadow);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px var(--shadow);
 }
 
 .container h3 {
     margin-top: 0;
     color: var(--text-color);
-    border-left: 4px solid #e67e22;
-    padding-left: 10px;
+    border-left: 5px solid #e67e22;
+    padding-left: 15px;
 }
 
 .dosya-adi small {
     color: #95a5a6;
     font-weight: normal;
     margin-left: 5px;
+    font-size: 0.85em;
 }
 
 /* Footer */
 footer {
     background: var(--card-bg);
     border-top: 1px solid var(--border-color);
-    padding: 20px;
+    padding: 25px 20px;
     text-align: center;
     margin-top: auto;
-}
-
-.footer-content {
-    max-width: 900px;
-    margin: 0 auto;
 }
 
 .footer-content p {
     margin: 10px 0;
     color: var(--text-color);
+    font-size: 0.95rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .dosya-listesi li {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .indir-buton {
-        align-self: flex-start;
-    }
-
-    .hero-section h1 {
-        font-size: 1.4rem;
-    }
-}
-
-.indir-buton {
-    min-width: 80px;
-    text-align: center;
-    display: inline-block;
-}
-
-/* --- Yeni Grid ve Ders Kartı Stilleri --- */
+/* --- Grid ve Ders Kartı Stilleri --- */
 
 .grid-container {
     display: grid;
+    /* Mobilde otomatik sığdır, min 280px */
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 25px;
     padding: 10px 0;
 }
 
@@ -316,7 +313,7 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 140px;
+    min-height: 160px;
     box-shadow: 0 4px 6px var(--shadow);
     position: relative;
     overflow: hidden;
@@ -324,32 +321,32 @@ footer {
 
 .ders-kutu:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 15px var(--shadow);
+    box-shadow: 0 10px 20px var(--shadow);
     border-color: var(--primary-color);
 }
 
-/* Sol tarafa renkli şerit ekler */
 .ders-kutu::before {
     content: '';
     position: absolute;
     left: 0;
     top: 0;
     height: 100%;
-    width: 5px;
+    width: 6px;
     background: var(--primary-color);
 }
 
 .ders-kutu h3 {
     margin: 0 0 10px 0;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: var(--text-color);
+    font-weight: 700;
 }
 
 .ders-kutu p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #7f8c8d;
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 .ok-isareti {
@@ -357,7 +354,6 @@ footer {
     font-size: 1.5rem;
     color: var(--primary-color);
     margin-top: 15px;
-    font-weight: bold;
 }
 
 .geri-buton {
@@ -368,8 +364,8 @@ footer {
     color: var(--text-color);
     font-weight: 600;
     background: var(--card-bg);
-    padding: 8px 15px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 25px;
     box-shadow: 0 2px 5px var(--shadow);
     transition: 0.2s;
 }
@@ -386,4 +382,92 @@ footer {
     border-radius: 8px;
     border: 1px solid #f5c6cb;
     text-align: center;
+    margin-top: 20px;
+}
+
+/* --- GELİŞMİŞ MOBİL UYUMLULUK (Responsive) --- */
+
+@media (max-width: 768px) {
+    /* Genel Yerleşim */
+    #main {
+        padding: 15px; /* Mobilde kenar boşluklarını azalt */
+    }
+
+    /* Grid Yapısını Tek Kolona Zorla */
+    .grid-container {
+        grid-template-columns: 1fr; /* Tam genişlikte tek kart */
+        gap: 15px;
+    }
+
+    /* Kart İçi Düzenlemeler */
+    .ders-kutu {
+        min-height: auto; /* Yüksekliği içeriğe göre ayarla */
+        padding: 20px;
+    }
+    
+    .ders-kutu h3 {
+        font-size: 1.2rem;
+    }
+
+    /* Liste Görünümü (Dosyalar) */
+    .dosya-listesi li {
+        flex-direction: column; /* Alt alta diz */
+        align-items: flex-start; /* Sola yasla */
+        gap: 12px;
+        padding: 15px 0;
+    }
+
+    .dosya-bilgi {
+        width: 100%;
+    }
+
+    /* Butonlar Mobilde Tam Genişlik */
+    .indir-buton {
+        width: 100%;
+        box-sizing: border-box; /* Padding dahil genişlik hesapla */
+        text-align: center;
+        padding: 10px;
+        font-size: 15px; /* Daha okunaklı */
+    }
+
+    /* Header ve Hero Alanı */
+    .hero-section {
+        padding: 30px 15px;
+    }
+
+    .hero-section h1 {
+        font-size: 1.5rem;
+    }
+
+    .container, .ders-kart {
+        padding: 15px; /* İç boşluğu azalt */
+    }
+
+    /* Sidebar İyileştirmeleri */
+    .sidebar {
+        width: 0; /* JS ile açıldığında width: 100% veya 280px yapılmalı */
+    }
+    
+    /* Sidebar açıldığında (JS ile kontrol ediliyorsa) daha geniş olsun */
+    .sidebar.open {
+        width: 80% !important; 
+        max-width: 300px;
+    }
+}
+
+/* Çok küçük ekranlar için ekstra ayarlar */
+@media (max-width: 480px) {
+    .header h1 { 
+        font-size: 1.2rem; /* Başlık küçült */
+    }
+    
+    .ders-kutu p {
+        font-size: 0.9rem;
+    }
+    
+    .geri-buton {
+        width: 100%; /* Geri butonu tam genişlik */
+        justify-content: center;
+        box-sizing: border-box;
+    }
 }
