@@ -62,14 +62,14 @@ Akış: Sınıf → Ders → Dosyalar
 
 ```json
 {
-  "ders_ad": "Felsefe",
+  "ders_ad": "Adabımuaşeret",
   "sinif": "10",
   "dosyalar": [
     {
-      "ad": "1. Dönem 1. Yazılı Hazırlık",
-      "ogretmen": "Ali Yılmaz",
-      "dosya": "dosyalar/10/mat_calisma.pdf",  // buraya ayrıca link konulabilir
-      "tarih": "2026-01-10"
+      "ad": "Adabımuaşeret 1. Dönem 2. Yazılı",
+      "ogretmen": "Özay Arıcı",
+      "dosya": "dosyalar/10/Adabımuaseret.doc",
+      "tarih": "2026-01-09"
     }
   ]
 }
@@ -82,3 +82,4 @@ Akış: Sınıf → Ders → Dosyalar
 - ID adı ile json adı aynı olmalı.
 - Tarih formatı YYYY-MM-DD olmalıdır.
 - JSON dosyalarında son elemandan sonra virgül bırakma.
+- Linkler eklenebilir
