@@ -1,0 +1,18 @@
+{
+  "ders_ad": "Almanca",
+  "sinif": "10",
+  "dosyalar": [
+    {
+      "ad": "1. Dönem 2. Yazılı Hazırlık",
+      "ogretmen": "Canan Koparan",
+      "dosya": "alm1.jpeg",  // buraya ayrıca link konulabilir
+      "tarih": "2026-01-14"
+    },
+    {
+      "ad": "1. Dönem 2. Yazılı Hazırlık",
+      "ogretmen": "Canan Koparan",
+      "dosya": "alm2.jpeg",  // buraya ayrıca link konulabilir
+      "tarih": "2026-01-14"
+    }
+  ]
+}
