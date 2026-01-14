@@ -3,15 +3,15 @@
   "sinif": "10",
   "dosyalar": [
     {
-      "ad": "1. Dönem 2. Yazılı Hazırlık",
+      "ad": "Almanca 1. Dönem 2. Yazılı 1. Not",
       "ogretmen": "Canan Koparan",
-      "dosya": "alm1.jpeg",  
+      "dosya": "dosyalar/10/Adabımuaseret.doc",
       "tarih": "2026-01-14"
     },
     {
-      "ad": "1. Dönem 2. Yazılı Hazırlık",
+      "ad": "Alamanca 1. Dönem 2. Yazılı 2. Not",
       "ogretmen": "Canan Koparan",
-      "dosya": "alm2.jpeg",  // buraya ayrıca link konulabilir
+      "dosya": "dosyalar/10/alm2.jpeg",
       "tarih": "2026-01-14"
     }
   ]
