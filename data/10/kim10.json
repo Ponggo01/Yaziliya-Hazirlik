@@ -3,9 +3,9 @@
   "sinif": "10",
   "dosyalar": [
     {
-      "ad": "1. Dönem 2. Yazılı Hazırlık",
+      "ad": "Kimya 1. Dönem 2. Yazılı",
       "ogretmen": "Bülent Hepsağ",
-      "dosya": "dosyalar/10/bilgisarmalkimya.pdf",  // buraya ayrıca link konulabilir
+      "dosya": "dosyalar/10/bilgisarmalkimya.pdf",
       "tarih": "2026-01-14"
     }
   ]
