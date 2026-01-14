@@ -1,0 +1,12 @@
+{
+  "ders_ad": "Kimya",
+  "sinif": "10",
+  "dosyalar": [
+    {
+      "ad": "1. Dönem 2. Yazılı Hazırlık",
+      "ogretmen": "Bülent Hepsağ",
+      "dosya": "dosyalar/10/bilgisarmalkimya.pdf",  // buraya ayrıca link konulabilir
+      "tarih": "2026-01-14"
+    }
+  ]
+}
