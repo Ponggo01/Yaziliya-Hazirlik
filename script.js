@@ -1,15 +1,16 @@
-// --- Temel Fonksiyonlar ---
+// =======================
+// TEMA İŞLEMLERİ
+// =======================
 function toggleTheme() {
     const body = document.body;
     const icon = document.getElementById('theme-icon');
     body.classList.toggle('dark-mode');
-    
-    // Tema tercihini kaydet
+
     if (body.classList.contains('dark-mode')) {
-        if(icon) icon.textContent = '☀️';
+        if (icon) icon.textContent = '☀️';
         localStorage.setItem('theme', 'dark');
     } else {
-        if(icon) icon.textContent = '🌙';
+        if (icon) icon.textContent = '🌙';
         localStorage.setItem('theme', 'light');
     }
 }
@@ -23,55 +24,66 @@ function loadTheme() {
     }
 }
 
-function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
-function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+// =======================
+// SIDEBAR
+// =======================
+function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+}
 
-// --- Sayfa Yüklenince Çalışacak Kodlar ---
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+}
+
+async function fetchSidebarData() {
+    try {
+        const response = await fetch(`data/siniflar.json?v=${Date.now()}`);
+        const data = await response.json();
+        const sidebar = document.getElementById('sidebar-content');
+
+        if (!sidebar) return;
+        sidebar.innerHTML = '';
+
+        data.siniflar.forEach(sinif => {
+            const link = document.createElement('a');
+            link.href = `sinif.html?id=${sinif.id}`;
+            link.innerText = sinif.ad;
+            sidebar.appendChild(link);
+        });
+
+        const about = document.createElement('a');
+        about.href = "hakkimizda.html";
+        about.innerText = "Hakkımızda";
+        about.className = "about-link";
+        sidebar.appendChild(about);
+
+    } catch (e) {
+        console.error("Sidebar yüklenemedi", e);
+    }
+}
+
+// =======================
+// SAYFA YÜKLENİNCE
+// =======================
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
     fetchSidebarData();
-    
-    // Hangi sayfadayız kontrolü
+
     const path = window.location.pathname;
-    
+
     if (path.includes('sinif.html')) {
         renderSinifPage();
     } else if (path.includes('ders.html')) {
         renderDersPage();
-    } 
-    
-    // Eğer anasayfadaysak (recent-updates div'i varsa) güncellemeleri çek
-    const updatesDiv = document.getElementById('recent-updates');
-    if (updatesDiv) {
-        showRecentUpdates(); 
     }
+
+    const updatesDiv = document.getElementById('recent-updates');
+    if (updatesDiv) showRecentUpdates();
 });
 
-// --- Sidebar Menüsü ---
-async function fetchSidebarData() {
-    try {
-        // Cache Busting: ?v=${new Date().getTime()} eklendi
-        const response = await fetch(`data/siniflar.json?v=${new Date().getTime()}`);
-        const data = await response.json();
-        const sidebar = document.getElementById('sidebar-content');
-        if (sidebar) {
-            sidebar.innerHTML = '';
-            data.siniflar.forEach(sinif => {
-                const link = document.createElement('a');
-                link.href = `sinif.html?id=${sinif.id}`;
-                link.innerText = sinif.ad;
-                sidebar.appendChild(link);
-            });
-            const about = document.createElement('a');
-            about.href = "hakkimizda.html";
-            about.innerText = "Hakkımızda";
-            about.className = "about-link";
-            sidebar.appendChild(about);
-        }
-    } catch (error) { console.error('Sidebar yüklenemedi:', error); }
-}
-
-// --- GÜNCELLEMELERİ DENETLEME (YENİLENMİŞ) ---
+// =======================
+// RECENT UPDATES
+// =======================
 async function showRecentUpdates() {
     const container = document.getElementById('recent-updates');
     container.innerHTML = '<p>Güncellemeler taranıyor...</p>';
@@ -79,96 +91,83 @@ async function showRecentUpdates() {
     let allFiles = [];
 
     try {
-        // 1. Sınıfları Çek (Cache Busting Eklendi)
-        const siniflarResp = await fetch(`data/siniflar.json?v=${new Date().getTime()}`);
+        const siniflarResp = await fetch(`data/siniflar.json?v=${Date.now()}`);
         const siniflarData = await siniflarResp.json();
 
-        // 2. Her sınıfı tek tek gez
-        // Promise.all kullanarak işlemleri paralel yapıyoruz (daha hızlı çalışır)
-        await Promise.all(siniflarData.siniflar.map(async (sinif) => {
+        await Promise.all(siniflarData.siniflar.map(async sinif => {
             try {
-                // Sınıfın ders listesini çek (Cache Busting Eklendi)
-                const derslerResp = await fetch(`data/${sinif.id}/dersler.json?v=${new Date().getTime()}`);
-                if (!derslerResp.ok) return; 
+                const derslerResp = await fetch(`data/${sinif.id}/dersler.json?v=${Date.now()}`);
+                if (!derslerResp.ok) return;
                 const derslerData = await derslerResp.json();
 
-                // 3. O sınıftaki her dersi tek tek gez
-                await Promise.all(derslerData.dersler.map(async (ders) => {
+                await Promise.all(derslerData.dersler.map(async ders => {
                     try {
-                        // Dersin dosya içeriğini çek (Cache Busting Eklendi)
-                        const dosyaResp = await fetch(`data/${sinif.id}/${ders.id}.json?v=${new Date().getTime()}`);
+                        const dosyaResp = await fetch(`data/${sinif.id}/${ders.id}.json?v=${Date.now()}`);
                         if (!dosyaResp.ok) return;
                         const dosyaData = await dosyaResp.json();
 
-                        // Dosyaları ana listeye ekle
                         dosyaData.dosyalar.forEach(d => {
                             allFiles.push({
                                 ...d,
-                                sinifAd: sinif.ad,     // "9. Sınıf"
-                                dersAd: ders.ad,       // "Matematik"
-                                rawDate: new Date(d.tarih) // Sıralama için tarih objesi
+                                sinifAd: sinif.ad,
+                                dersAd: ders.ad,
+                                rawDate: new Date(d.tarih)
                             });
                         });
-                    } catch (err) {
-                        // Bir dersin json dosyası yoksa veya hatalıysa atla
-                    }
+                    } catch {}
                 }));
-
-            } catch (err) {
-                // Sınıfın ders listesi yoksa atla
-            }
+            } catch {}
         }));
 
-        // 4. Tarihe göre yeniden eskiye sırala
         allFiles.sort((a, b) => b.rawDate - a.rawDate);
+        const recent = allFiles.slice(0, 5);
 
-        // 5. İlk 5 tanesini al
-        const recentFiles = allFiles.slice(0, 5);
-
-        // 6. Ekrana Bas
-        if (recentFiles.length === 0) {
-            container.innerHTML = '<p>Henüz yüklenmiş dosya bulunmamaktadır.</p>';
+        if (recent.length === 0) {
+            container.innerHTML = '<p>Henüz dosya yok.</p>';
             return;
         }
 
         let html = '<ul class="dosya-listesi">';
-        recentFiles.forEach(f => {
+        recent.forEach(f => {
             html += `
-                <li>
-                    <div class="dosya-bilgi">
-                        <span class="dosya-adi">${f.ad} <small>(${f.sinifAd} - ${f.dersAd})</small></span>
-                        <span class="ogretmen-adi">Hazırlayan: ${f.ogretmen} • ${f.tarih}</span>
-                    </div>
-                    ${createDownloadButton(f.dosya)}
-                </li>`;
+            <li>
+                <div class="dosya-bilgi">
+                    <span class="dosya-adi">${f.ad}
+                        <small>(${f.sinifAd} - ${f.dersAd})</small>
+                    </span>
+                    <span class="ogretmen-adi">
+                        Hazırlayan: ${f.ogretmen} • ${f.tarih}
+                    </span>
+                </div>
+                ${createDownloadButton(f.dosya)}
+            </li>`;
         });
         html += '</ul>';
         container.innerHTML = html;
 
     } catch (e) {
-        console.error(e);
-        container.innerHTML = '<p>Güncellemeler alınırken hata oluştu.</p>';
+        container.innerHTML = '<p>Hata oluştu.</p>';
     }
 }
 
-// --- SINIF SAYFASI (Örn: 9. Sınıf Dersleri) ---
+// =======================
+// SINIF SAYFASI
+// =======================
 async function renderSinifPage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sinifId = urlParams.get('id');
+    const params = new URLSearchParams(window.location.search);
+    const sinifId = params.get('id');
     const container = document.getElementById('dersler-grid');
     const title = document.getElementById('sinif-baslik');
 
     if (!sinifId) return;
 
     try {
-        // Cache Busting Eklendi
-        const response = await fetch(`data/${sinifId}/dersler.json?v=${new Date().getTime()}`);
-        if (!response.ok) throw new Error("Veri yok");
+        const response = await fetch(`data/${sinifId}/dersler.json?v=${Date.now()}`);
         const data = await response.json();
 
-        title.innerText = data.sinif_ad + " Dersleri";
-        
+        title.innerText = `${data.sinif_ad} Dersleri`;
         let html = '';
+
         data.dersler.forEach(ders => {
             html += `
             <a href="ders.html?sinif=${sinifId}&id=${ders.id}" class="ders-kutu">
@@ -177,57 +176,65 @@ async function renderSinifPage() {
                 <span class="ok-isareti">➜</span>
             </a>`;
         });
+
         container.innerHTML = html;
-    } catch (e) {
-        container.innerHTML = '<p>Dersler yüklenirken hata oluştu.</p>';
+
+    } catch {
+        container.innerHTML = '<p>Dersler yüklenemedi.</p>';
     }
 }
 
-// --- DERS SAYFASI (Örn: 9. Sınıf -> Matematik) ---
+// =======================
+// DERS SAYFASI (EN YENİ ÜSTTE)
+// =======================
 async function renderDersPage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sinifId = urlParams.get('sinif');
-    const dersId = urlParams.get('id');
+    const params = new URLSearchParams(window.location.search);
+    const sinifId = params.get('sinif');
+    const dersId = params.get('id');
     const container = document.getElementById('dosya-listesi-container');
     const title = document.getElementById('ders-baslik');
 
     if (!sinifId || !dersId) return;
 
     try {
-        // Cache Busting Eklendi
-        const response = await fetch(`data/${sinifId}/${dersId}.json?v=${new Date().getTime()}`);
-        if (!response.ok) throw new Error("Dosya yok");
+        const response = await fetch(`data/${sinifId}/${dersId}.json?v=${Date.now()}`);
         const data = await response.json();
-        
+
         title.innerText = `${data.sinif}. Sınıf - ${data.ders_ad}`;
 
+        // 🔥 TARİHE GÖRE SIRALA (EN YENİ EN ÜSTTE)
+        data.dosyalar.sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
+
         let html = '<ul class="dosya-listesi">';
-        if(data.dosyalar.length === 0) {
-            html += '<p>Bu derse ait dosya bulunamadı.</p>';
-        } else {
-            data.dosyalar.forEach(dosya => {
-                html += `
-                    <li>
-                        <div class="dosya-bilgi">
-                            <span class="dosya-adi">${dosya.ad}</span>
-                            <span class="ogretmen-adi">Hazırlayan: ${dosya.ogretmen} • ${dosya.tarih}</span>
-                        </div>
-                        ${createDownloadButton(dosya.dosya)}
-                    </li>`;
-            });
-        }
+        data.dosyalar.forEach(d => {
+            html += `
+            <li>
+                <div class="dosya-bilgi">
+                    <span class="dosya-adi">${d.ad}</span>
+                    <span class="ogretmen-adi">
+                        Hazırlayan: ${d.ogretmen} • ${d.tarih}
+                    </span>
+                </div>
+                ${createDownloadButton(d.dosya)}
+            </li>`;
+        });
         html += '</ul>';
+
         container.innerHTML = html;
-    } catch (e) {
+
+    } catch {
         title.innerText = "Ders Bulunamadı";
-        container.innerHTML = `<div class="uyari">Bu dersin notları henüz sisteme yüklenmemiştir.</div>`;
+        container.innerHTML = '<div class="uyari">Not bulunamadı.</div>';
     }
 }
 
-// --- Yardımcı: İndirme Butonu ---
-function createDownloadButton(dosyaYolu) {
-    const isExternal = dosyaYolu.startsWith('http');
+// =======================
+// İNDİR / LİNK BUTONU
+// =======================
+function createDownloadButton(path) {
+    const isExternal = path.startsWith('http');
     const label = isExternal ? "🔗 Git" : "⬇ İndir";
-    const target = isExternal ? 'target="_blank"' : 'download';
-    return `<a href="${dosyaYolu}" ${target} class="indir-buton">${label}</a>`;
+    const attr = isExternal ? 'target="_blank"' : 'download';
+    return `<a href="${path}" ${attr} class="indir-buton">${label}</a>`;
 }
+
