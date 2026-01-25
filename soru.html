@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soru - Cevap | Piri Reis AL</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <div id="sidebar-content"></div>
+        <div class="sidebar-footer">
+            <button id="theme-toggle" class="theme-button" onclick="toggleTheme()">
+                <span id="theme-icon">🌙</span> 
+            </button>
+            <div class="license-info">
+                <p>© 2025 Piri Reis AL</p>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div style="display: flex; align-items: center;">
+            <span class="hamburger" onclick="openNav()">☰</span>
+            <a href="index.html" style="color:white; text-decoration:none; font-weight:bold; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-graduation-cap"></i> Piri Reis Forum
+            </a>
+        </div>
+        <a href="index.html" class="geri-buton" style="margin:0; font-size: 0.9rem; padding: 8px 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">
+            <i class="fa-solid fa-home"></i> <span style="margin-left:5px;">Ana Sayfa</span>
+        </a>
+    </header>
+
+    <div id="main">
+        <div class="hero-section">
+            <h2><i class="fa-solid fa-comments"></i> Soru Cevap Platformu</h2>
+            <p>Aklına takılan soruyu sor veya arkadaşlarının sorularını cevapla.</p>
+            
+            <button class="action-btn" onclick="openModal('questionModal')">
+                <i class="fa-solid fa-plus"></i> Soru Sor
+            </button>
+        </div>
+
+        <div id="questions-container" class="grid-container" style="grid-template-columns: 1fr;">
+            <div class="loading-spinner" style="text-align: center; color: var(--text-color);">Sorular yükleniyor...</div>
+        </div>
+    </div>
+
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('questionModal')">&times;</span>
+            <h3>Yeni Soru Sor</h3>
+            <form id="questionForm">
+                <textarea id="q-text" placeholder="Sorunuzu buraya yazın..." rows="4"></textarea>
+                
+                <div class="file-upload-wrapper">
+                    <label for="q-image" class="file-label">
+                        <i class="fa-solid fa-camera"></i> Fotoğraf Ekle (Opsiyonel)
+                    </label>
+                    <input type="file" id="q-image" accept="image/png, image/jpeg">
+                    <span id="q-file-name" style="font-size:0.8rem; color:var(--text-color);"></span>
+                </div>
+
+                <div class="progress-bar-container" style="display:none;">
+                    <div id="q-progress" class="progress-bar"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">Gönder</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="answerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('answerModal')">&times;</span>
+            <h3>Cevap Yaz</h3>
+            <input type="hidden" id="currentQuestionId">
+            <form id="answerForm">
+                <textarea id="a-text" placeholder="Cevabınızı yazın..." rows="4"></textarea>
+                
+                <div class="file-upload-wrapper">
+                    <label for="a-image" class="file-label">
+                        <i class="fa-solid fa-camera"></i> Fotoğraf Ekle
+                    </label>
+                    <input type="file" id="a-image" accept="image/png, image/jpeg">
+                    <span id="a-file-name" style="font-size:0.8rem; color:var(--text-color);"></span>
+                </div>
+
+                <div class="progress-bar-container" style="display:none;">
+                    <div id="a-progress" class="progress-bar"></div>
+                </div>
+
+                <button type="submit" class="submit-btn">Cevabı Gönder</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal image-modal" onclick="this.style.display='none'">
+        <span class="close-modal" style="color:white; right: 20px; top: 20px;">&times;</span>
+        <img class="modal-content-img" id="fullImage">
+    </div>
+
+    <script src="script.js"></script> 
+    <script type="module" src="forum.js"></script> 
+</body>
+</html>

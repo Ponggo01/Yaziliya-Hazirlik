@@ -44,6 +44,7 @@ async function fetchSidebarData() {
         if (!sidebar) return;
         sidebar.innerHTML = '';
 
+        // 1. Sınıfları Listele
         data.siniflar.forEach(sinif => {
             const link = document.createElement('a');
             link.href = `sinif.html?id=${sinif.id}`;
@@ -51,14 +52,24 @@ async function fetchSidebarData() {
             sidebar.appendChild(link);
         });
 
+        // 2. Hakkımızda Linki
         const about = document.createElement('a');
         about.href = "hakkimizda.html";
         about.innerText = "Hakkımızda";
-        about.className = "about-link";
+        about.className = "about-link"; // CSS'de border-top var
         sidebar.appendChild(about);
+
+        // 3. Soru - Cevap Linki (YENİ EKLENDİ)
+        const forum = document.createElement('a');
+        forum.href = "soru.html";
+        forum.innerHTML = '<span style="font-size: 0.9em;">💬 Soru - Cevap</span>';
+        forum.style.color = "#3498db"; // Dikkat çekmesi için hafif mavi
+        sidebar.appendChild(forum);
 
     } catch (e) {
         console.error("Sidebar yüklenemedi", e);
+        const sidebar = document.getElementById('sidebar-content');
+        if(sidebar) sidebar.innerHTML = '<p style="color:white; padding:15px;">Menü yüklenemedi.</p>';
     }
 }
 
@@ -237,4 +248,3 @@ function createDownloadButton(path) {
     const attr = isExternal ? 'target="_blank"' : 'download';
     return `<a href="${path}" ${attr} class="indir-buton">${label}</a>`;
 }
-
