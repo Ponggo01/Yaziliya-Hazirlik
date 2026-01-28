@@ -39,7 +39,7 @@
             <h2><i class="fa-solid fa-comments"></i> Soru Cevap Platformu</h2>
             <p>Aklına takılan soruyu sor veya arkadaşlarının sorularını cevapla.</p>
             
-            <button class="action-btn" onclick="openModal('questionModal')">
+            <button class="action-btn" onclick="resetAndOpenQuestionModal()">
                 <i class="fa-solid fa-plus"></i> Soru Sor
             </button>
         </div>
@@ -52,23 +52,23 @@
     <div id="questionModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('questionModal')">&times;</span>
-            <h3>Yeni Soru Sor</h3>
+            <h3 id="q-modal-title">Yeni Soru Sor</h3>
+            <div id="q-ban-msg" class="ban-alert">Hesabınız engellendiği için işlem yapamazsınız.</div>
+            
             <form id="questionForm">
+                <input type="hidden" id="edit-q-id" value="">
+                
                 <textarea id="q-text" placeholder="Sorunuzu buraya yazın..." rows="4"></textarea>
                 
                 <div class="file-upload-wrapper">
                     <label for="q-image" class="file-label">
-                        <i class="fa-solid fa-camera"></i> Fotoğraf Ekle (Opsiyonel)
+                        <i class="fa-solid fa-camera"></i> Fotoğraf <span id="q-img-action-text">Ekle</span>
                     </label>
                     <input type="file" id="q-image" accept="image/png, image/jpeg">
                     <span id="q-file-name" style="font-size:0.8rem; color:var(--text-color);"></span>
                 </div>
-
-                <div class="progress-bar-container" style="display:none;">
-                    <div id="q-progress" class="progress-bar"></div>
-                </div>
-
-                <button type="submit" class="submit-btn">Gönder</button>
+                
+                <button type="submit" class="submit-btn" id="q-submit-btn">Gönder</button>
             </form>
         </div>
     </div>
@@ -76,24 +76,24 @@
     <div id="answerModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('answerModal')">&times;</span>
-            <h3>Cevap Yaz</h3>
+            <h3 id="a-modal-title">Cevap Yaz</h3>
+            <div id="a-ban-msg" class="ban-alert">Hesabınız engellendiği için işlem yapamazsınız.</div>
+
             <input type="hidden" id="currentQuestionId">
+            <input type="hidden" id="edit-a-id" value="">
+
             <form id="answerForm">
                 <textarea id="a-text" placeholder="Cevabınızı yazın..." rows="4"></textarea>
                 
                 <div class="file-upload-wrapper">
                     <label for="a-image" class="file-label">
-                        <i class="fa-solid fa-camera"></i> Fotoğraf Ekle
+                        <i class="fa-solid fa-camera"></i> Fotoğraf <span id="a-img-action-text">Ekle</span>
                     </label>
                     <input type="file" id="a-image" accept="image/png, image/jpeg">
                     <span id="a-file-name" style="font-size:0.8rem; color:var(--text-color);"></span>
                 </div>
 
-                <div class="progress-bar-container" style="display:none;">
-                    <div id="a-progress" class="progress-bar"></div>
-                </div>
-
-                <button type="submit" class="submit-btn">Cevabı Gönder</button>
+                <button type="submit" class="submit-btn" id="a-submit-btn">Cevabı Gönder</button>
             </form>
         </div>
     </div>
