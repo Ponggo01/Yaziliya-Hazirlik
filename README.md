@@ -673,7 +673,7 @@ Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
 ```
 MIT License
 
-Copyright (c) 2025 Piri Reis Anadolu Lisesi
+Copyright (c) 2025 Ponggo01
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -703,15 +703,12 @@ SOFTWARE.
 ## 📞 İletişim
 
 - **GitHub Issues**: [Yaziliya-Hazirlik/issues](https://github.com/Ponggo01/Yaziliya-Hazirlik/issues)
-- **Email**: Okul iletişim bilgileri
-- **Website**: [GitHub Pages](https://ponggo01.github.io/Yaziliya-Hazirlik/)
 
 ## 🙏 Teşekkürler
 
 - Firebase ekibine ücretsiz backend hizmeti için
 - GitHub'a ücretsiz hosting için
 - Tüm açık kaynak katkıda bulunanlara
-- Piri Reis Anadolu Lisesi öğretmen ve öğrencilerine
 
 ## 🗺️ Roadmap
 
