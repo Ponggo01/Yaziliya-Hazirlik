@@ -1,12 +1,11 @@
 {
   "duyurular": [
-    { "text": "2. Dönem 1. Yazılı tarihleri açıklandı! İncelemek için tıklayın.", "link": "#" },
-    { "text": "Matematik ders notları güncellendi." },
-    { "text": "Forum kuralları güncellenmiştir, lütfen okuyunuz." }
+    { "text": "Ders Programları açıklandı.", "link": "https://pirireisanadolulisesi.meb.k12.tr/meb_iys_dosyalar/01/19/968962/dosyalar/2026_01/697c59479733b492075772_02022026_SINIF_PROGRAMI.pdf" },
+    { "text": "Matematik ders notları güncellendi." }
   ],
   "sayac": {
     "aktif": true,
-    "baslik": "2. Dönem 1. Yazılılar",
-    "tarih": "2026-03-25T09:00:00"
+    "baslik": "YKS Sayaç",
+    "tarih": "2026-06-20T09:00:00"
   }
 }
