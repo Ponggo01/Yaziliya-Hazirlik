@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piri Reis Anadolu Lisesi</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
 
@@ -28,12 +30,36 @@
     </header>
 
     <div id="main">
-        <div class="hero-section">
-            <h1>Yazılıya Hazırlık Portalına Hoş Geldiniz</h1>
-            <p>Sınıfınızı seçerek ders notlarına ve çalışma sorularına ulaşabilirsiniz.</p>
+        <!-- DUYURU VE SAYAÇ ALANI (YENİ) -->
+        <div id="info-panel" class="info-panel" style="display:none;">
+            <div class="announcement-box">
+                <h4><i class="fa-solid fa-bullhorn"></i> Duyurular</h4>
+                <ul id="announcement-list"></ul>
+            </div>
+            <div class="countdown-box">
+                <h4><i class="fa-regular fa-clock"></i> <span id="countdown-title">Sınava Kalan</span></h4>
+                <div id="countdown-timer" class="timer">00 gün 00:00:00</div>
+            </div>
         </div>
 
-        <div class="container">
+        <div class="hero-section">
+            <h1>Yazılıya Hazırlık Portalı</h1>
+            <p>Sınıfınızı seçerek ders notlarına ve çalışma sorularına ulaşabilirsiniz.</p>
+            
+            <!-- ARAMA ÇUBUĞU (YENİ) -->
+            <div class="search-container">
+                <i class="fa-solid fa-search search-icon"></i>
+                <input type="text" id="global-search" placeholder="Ders, dosya veya konu ara..." onkeyup="handleSearch(this.value)">
+            </div>
+        </div>
+
+        <!-- ARAMA SONUÇLARI -->
+        <div id="search-results" class="container" style="display:none; margin-bottom: 20px;">
+            <h3>🔍 Arama Sonuçları</h3>
+            <ul id="search-list" class="dosya-listesi"></ul>
+        </div>
+
+        <div class="container" id="recent-container">
             <h3>📌 Son Eklenen Dosyalar</h3>
             <div id="recent-updates">
                 <p>Güncellemeler denetleniyor...</p>
@@ -49,5 +75,6 @@
     </footer>
 
     <script src="script.js"></script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>

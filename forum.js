@@ -3,7 +3,7 @@
 // =======================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, where, getDocs, serverTimestamp, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, where, getDocs, serverTimestamp, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 // =======================
@@ -102,8 +102,6 @@ function compressImage(file) {
 // =======================
 async function checkBanStatus() {
     try {
-        // Eğer veritabanı kuralları izin vermezse burası hata fırlatabilir.
-        // Hata fırlatırsa "catch" bloğuna düşeriz, kullanıcıyı engellemeyiz (backend zaten engeller).
         const banRef = doc(db, "banned_ids", localAnonymousId);
         const banSnap = await getDoc(banRef);
 
@@ -112,20 +110,49 @@ async function checkBanStatus() {
             if(data.expiresAt) {
                const now = new Date();
                const expires = data.expiresAt.toDate(); 
-               if (expires > now) return true; // Ban devam ediyor
-               return false; // Ban süresi dolmuş
+               if (expires > now) return true; 
+               return false; 
             }
-            return true; // Süresiz ban
+            return true; 
         }
-        return false; // Temiz
+        return false; 
     } catch (e) {
-        // İzin hataları veya bağlantı hataları buraya düşer.
-        // Kullanıcı deneyimini bozmamak için 'false' dönüyoruz.
-        // Asıl güvenlik Firestore Rules tarafındadır.
-        console.warn("Ban kontrolü yapılamadı (Bu bir hata değil, yetki kısıtlaması olabilir):", e.code);
+        console.warn("Ban kontrolü yapılamadı:", e.code);
         return false; 
     }
 }
+
+// =======================
+// BEĞENİ SİSTEMİ (YENİ)
+// =======================
+window.toggleLike = async (docId, collectionName) => {
+    // LocalStorage ile basit bir kontrol (IP bazlı değil, tarayıcı bazlı)
+    const storageKey = `liked_${docId}`;
+    const hasLiked = localStorage.getItem(storageKey);
+    const btn = document.getElementById(`like-btn-${docId}`);
+    const countSpan = document.getElementById(`like-count-${docId}`);
+
+    if (hasLiked) {
+        // Geri al
+        try {
+            const ref = doc(db, collectionName, docId);
+            await updateDoc(ref, { likes: increment(-1) });
+            localStorage.removeItem(storageKey);
+            btn.classList.remove('liked');
+            if(countSpan) countSpan.innerText = parseInt(countSpan.innerText) - 1;
+        } catch(e) { console.error(e); }
+    } else {
+        // Beğen
+        try {
+            const ref = doc(db, collectionName, docId);
+            await updateDoc(ref, { likes: increment(1) });
+            localStorage.setItem(storageKey, 'true');
+            btn.classList.add('liked');
+            if(countSpan) countSpan.innerText = parseInt(countSpan.innerText) + 1;
+        } catch(e) { console.error(e); }
+    }
+};
+
 
 // =======================
 // SORU İŞLEMLERİ
@@ -191,7 +218,8 @@ if(qForm) {
                     authId: currentUserAuthId,
                     text: text,
                     imageUrl: imageUrl || "",
-                    createdAt: serverTimestamp()
+                    createdAt: serverTimestamp(),
+                    likes: 0 // Başlangıç
                 });
             }
 
@@ -208,7 +236,7 @@ if(qForm) {
 }
 
 // =======================
-// LİSTELEME (DÜZELTİLDİ: YAZI ÜSTTE, RESİM ALTTA)
+// LİSTELEME
 // =======================
 function loadQuestions() {
     const container = document.getElementById('questions-container');
@@ -228,11 +256,12 @@ function loadQuestions() {
             const data = docSnap.data();
             const date = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('tr-TR') : '...';
             const isMyQuestion = data.anonymousUserId === localAnonymousId;
+            const likeCount = data.likes || 0;
+            const isLiked = localStorage.getItem(`liked_${docSnap.id}`) ? 'liked' : '';
             
             const safeText = data.text.replace(/"/g, '&quot;');
             const safeImg = data.imageUrl ? data.imageUrl : '';
 
-            // Düzenle butonu
             const editBtn = isMyQuestion 
                 ? `<button class="edit-btn" onclick="editQuestion('${docSnap.id}', '${safeText.replace(/'/g, "\\'")}', '${safeImg ? 'VAR' : ''}')"><i class="fa-solid fa-pen"></i></button>` 
                 : '';
@@ -241,15 +270,8 @@ function loadQuestions() {
             div.className = "question-card";
             div.id = `card-${docSnap.id}`;
             
-            // --- GÖRÜNÜM DÜZENİ BURADA BELİRLENİYOR ---
             let contentHtml = "";
-            
-            // 1. ÖNCE YAZI
-            if (data.text) {
-                contentHtml += `<div class="text-content">${data.text}</div>`;
-            }
-
-            // 2. SONRA RESİM
+            if (data.text) contentHtml += `<div class="text-content">${data.text}</div>`;
             if (data.imageUrl) {
                 contentHtml += `<div class="image-container">
                                     <img src="${data.imageUrl}" class="post-image" onclick="expandImage('${data.imageUrl}')">
@@ -274,15 +296,19 @@ function loadQuestions() {
                         <i class="fa-solid fa-chevron-down"></i> Cevapları Göster
                     </button>
                     
-                    <div class="answers-section" id="answers-${docSnap.id}">
-                        </div>
+                    <div class="answers-section" id="answers-${docSnap.id}"></div>
                 </div>
 
                 <div class="question-footer">
-                    <button class="reply-btn" onclick="prepareReply('${docSnap.id}')">
-                        <i class="fa-solid fa-reply"></i> Cevap Yaz
-                    </button>
-                    ${isMyQuestion ? '<small style="color:#e74c3c">Kendi soruna cevap veremezsin</small>' : ''}
+                    <div class="action-group">
+                        <button class="like-btn ${isLiked}" id="like-btn-${docSnap.id}" onclick="toggleLike('${docSnap.id}', 'questions')">
+                            <i class="fa-solid fa-heart"></i> <span id="like-count-${docSnap.id}">${likeCount}</span>
+                        </button>
+                        <button class="reply-btn" onclick="prepareReply('${docSnap.id}')">
+                            <i class="fa-solid fa-reply"></i> Cevap Yaz
+                        </button>
+                    </div>
+                    ${isMyQuestion ? '<small style="color:#e74c3c; font-size:0.8rem;">Kendi soruna cevap veremezsin</small>' : ''}
                 </div>
             `;
             container.appendChild(div);
@@ -329,6 +355,9 @@ function loadAnswers(questionId) {
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
             const isMe = data.anonymousUserId === localAnonymousId;
+            const likeCount = data.likes || 0;
+            const isLiked = localStorage.getItem(`liked_${docSnap.id}`) ? 'liked' : '';
+            
             const safeText = data.text.replace(/"/g, '&quot;');
             const safeImg = data.imageUrl ? 'VAR' : '';
 
@@ -348,6 +377,11 @@ function loadAnswers(questionId) {
                     </span>
                 </div>
                 <div>${data.text} ${imgHtml}</div>
+                <div style="margin-top:5px;">
+                     <button class="like-btn ${isLiked}" style="font-size:0.75rem; padding:4px 8px;" id="like-btn-${docSnap.id}" onclick="toggleLike('${docSnap.id}', 'answers')">
+                            <i class="fa-solid fa-heart"></i> <span id="like-count-${docSnap.id}">${likeCount}</span>
+                    </button>
+                </div>
             </div>`;
         });
         ansContainer.innerHTML = html;
@@ -421,7 +455,8 @@ if(aForm) {
                     authId: currentUserAuthId,
                     text: text,
                     imageUrl: imageUrl || "",
-                    createdAt: serverTimestamp()
+                    createdAt: serverTimestamp(),
+                    likes: 0
                 });
                 
                 const section = document.getElementById(`answers-${questionId}`);

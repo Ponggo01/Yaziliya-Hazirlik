@@ -56,14 +56,14 @@ async function fetchSidebarData() {
         const about = document.createElement('a');
         about.href = "hakkimizda.html";
         about.innerText = "Hakkımızda";
-        about.className = "about-link"; // CSS'de border-top var
+        about.className = "about-link"; 
         sidebar.appendChild(about);
 
-        // 3. Soru - Cevap Linki (YENİ EKLENDİ)
+        // 3. Soru - Cevap Linki
         const forum = document.createElement('a');
         forum.href = "soru.html";
         forum.innerHTML = '<span style="font-size: 0.9em;">💬 Soru - Cevap</span>';
-        forum.style.color = "#3498db"; // Dikkat çekmesi için hafif mavi
+        forum.style.color = "#3498db"; 
         sidebar.appendChild(forum);
 
     } catch (e) {
@@ -86,21 +86,130 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSinifPage();
     } else if (path.includes('ders.html')) {
         renderDersPage();
+    } else if (path.includes('index.html') || path.endsWith('/')) {
+        // Sadece anasayfada çalışsın
+        const updatesDiv = document.getElementById('recent-updates');
+        if (updatesDiv) showRecentUpdates();
+        fetchInfoPanel(); // Duyuruları ve sayacı yükle
     }
-
-    const updatesDiv = document.getElementById('recent-updates');
-    if (updatesDiv) showRecentUpdates();
 });
 
 // =======================
-// RECENT UPDATES
+// DUYURU VE SAYAÇ (YENİ)
 // =======================
-async function showRecentUpdates() {
-    const container = document.getElementById('recent-updates');
-    container.innerHTML = '<p>Güncellemeler taranıyor...</p>';
+async function fetchInfoPanel() {
+    const panel = document.getElementById('info-panel');
+    const annList = document.getElementById('announcement-list');
+    const countdownTitle = document.getElementById('countdown-title');
+    const timerDisplay = document.getElementById('countdown-timer');
 
-    let allFiles = [];
+    if(!panel) return;
 
+    try {
+        // Bu dosya yoksa catch bloğuna düşer ve paneli gizler
+        const resp = await fetch(`data/duyurular.json?v=${Date.now()}`);
+        if(!resp.ok) return;
+        
+        const data = await resp.json();
+        
+        // Paneli görünür yap
+        panel.style.display = "flex";
+
+        // Duyurular
+        annList.innerHTML = "";
+        data.duyurular.forEach(d => {
+            const li = document.createElement('li');
+            li.innerHTML = d.link ? `<a href="${d.link}" target="_blank" style="color:var(--primary-color)">${d.text}</a>` : d.text;
+            annList.appendChild(li);
+        });
+
+        // Sayaç
+        if(data.sayac && data.sayac.aktif) {
+            countdownTitle.innerText = data.sayac.baslik;
+            const targetDate = new Date(data.sayac.tarih).getTime();
+
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    timerDisplay.innerText = "Süre Doldu!";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                
+                timerDisplay.innerText = `${days} gün ${hours}sa ${minutes}dk`;
+            };
+
+            updateTimer();
+            setInterval(updateTimer, 60000); // Her dakika güncelle
+        } else {
+            document.querySelector('.countdown-box').style.display = 'none';
+        }
+
+    } catch (e) {
+        console.log("Duyuru dosyası yok veya hata:", e);
+        panel.style.display = "none";
+    }
+}
+
+// =======================
+// GLOBAL ARAMA (YENİ)
+// =======================
+let searchDebounce;
+async function handleSearch(query) {
+    clearTimeout(searchDebounce);
+    const resultContainer = document.getElementById('search-results');
+    const list = document.getElementById('search-list');
+    const recent = document.getElementById('recent-container');
+
+    if (!query || query.length < 3) {
+        resultContainer.style.display = 'none';
+        if(recent) recent.style.display = 'block';
+        return;
+    }
+
+    searchDebounce = setTimeout(async () => {
+        list.innerHTML = '<li style="justify-content:center;">Aranıyor...</li>';
+        resultContainer.style.display = 'block';
+        if(recent) recent.style.display = 'none';
+
+        const allFiles = await getAllFiles(); // Aşağıdaki yardımcı fonksiyon
+        const lowerQ = query.toLocaleLowerCase('tr');
+
+        const filtered = allFiles.filter(f => 
+            f.ad.toLocaleLowerCase('tr').includes(lowerQ) ||
+            f.dersAd.toLocaleLowerCase('tr').includes(lowerQ) ||
+            f.sinifAd.toLocaleLowerCase('tr').includes(lowerQ)
+        );
+
+        list.innerHTML = '';
+        if (filtered.length === 0) {
+            list.innerHTML = '<li style="justify-content:center;">Sonuç bulunamadı.</li>';
+            return;
+        }
+
+        filtered.forEach(f => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="dosya-bilgi">
+                    <span class="dosya-adi">${f.ad} <small>(${f.sinifAd} - ${f.dersAd})</small></span>
+                    <span class="ogretmen-adi">${f.ogretmen}</span>
+                </div>
+                ${createDownloadButton(f.dosya)}
+            `;
+            list.appendChild(li);
+        });
+
+    }, 500);
+}
+
+// Yardımcı: Tüm dosyaları çeker (Cache mekanizması eklenebilir)
+async function getAllFiles() {
+    let files = [];
     try {
         const siniflarResp = await fetch(`data/siniflar.json?v=${Date.now()}`);
         const siniflarData = await siniflarResp.json();
@@ -118,18 +227,33 @@ async function showRecentUpdates() {
                         const dosyaData = await dosyaResp.json();
 
                         dosyaData.dosyalar.forEach(d => {
-                            allFiles.push({
+                            files.push({
                                 ...d,
                                 sinifAd: sinif.ad,
-                                dersAd: ders.ad,
-                                rawDate: new Date(d.tarih)
+                                dersAd: ders.ad
                             });
                         });
                     } catch {}
                 }));
             } catch {}
         }));
+    } catch {}
+    return files;
+}
 
+
+// =======================
+// RECENT UPDATES
+// =======================
+async function showRecentUpdates() {
+    const container = document.getElementById('recent-updates');
+    container.innerHTML = '<p>Güncellemeler taranıyor...</p>';
+
+    try {
+        let allFiles = await getAllFiles(); // Yukarıdaki fonksiyonu tekrar kullan
+        // Tarih formatını işle
+        allFiles = allFiles.map(f => ({...f, rawDate: new Date(f.tarih)}));
+        
         allFiles.sort((a, b) => b.rawDate - a.rawDate);
         const recent = allFiles.slice(0, 5);
 
@@ -157,6 +281,7 @@ async function showRecentUpdates() {
         container.innerHTML = html;
 
     } catch (e) {
+        console.error(e);
         container.innerHTML = '<p>Hata oluştu.</p>';
     }
 }
