@@ -10,13 +10,13 @@ import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gsta
 // FIREBASE AYARLARI
 // =======================
 const firebaseConfig = {
-    apiKey: "AIzaSyDtDYR_lnULdYiZX_0bdEpVUHgewiaCoo4",
-    authDomain: "yazilihazirlik.firebaseapp.com",
-    projectId: "yazilihazirlik",
-    storageBucket: "yazilihazirlik.firebasestorage.app",
-    messagingSenderId: "502624255888",
-    appId: "1:502624255888:web:1b4e56e20e3a288716bd15",
-    measurementId: "G-7GNQWQC8TK"
+    apiKey: "AIzaSyCJv2tEH0pjQ_CIdSFee9vSWzxv8QjvBYs",
+    authDomain: "yaziliyahazirlik-8bbfc.firebaseapp.com",
+    projectId: "yaziliyahazirlik-8bbfc",
+    storageBucket: "yaziliyahazirlik-8bbfc.firebasestorage.app",
+    messagingSenderId: "121705667093",
+    appId: "1:121705667093:web:53ca31da37cd4e0438cc1c",
+    measurementId: "G-537PNCWJS3"
 };
 
 const app = initializeApp(firebaseConfig);
